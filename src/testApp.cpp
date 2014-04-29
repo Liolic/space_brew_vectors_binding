@@ -1,13 +1,10 @@
 #include "testApp.h"
 
 ofMesh mesh;
-int numPoints = 10000;
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    
-    // ofHideCursor();
-    
+        
     geode.loadMovie("geode2.mp4");
     geode.play();
     
@@ -21,21 +18,11 @@ void testApp::setup(){
     spacebrew.addSubscribe("balloons", "range");// just typing "boolean" also works
     spacebrew.connect( host, name, description );
     Spacebrew::addListener(this, spacebrew);
-    
-    mesh.setupIndicesAuto();
-    mesh.setMode(OF_PRIMITIVE_POINTS);
-    
-    for (int i=0; i<numPoints; i++ ){
-        mesh.addVertex(ofVec3f(0,0,0));
-        mesh.addTexCoord(ofVec2f(0,0));
-        mesh.addColor(ofFloatColor(1));
-    }
+
+//something new here for git
+
+
 }
-
-//something new here for git 
-
-
-
 //--------------------------------------------------------------
 void testApp::update(){
     geode.update();
@@ -46,21 +33,16 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
+    ofSetColor(255, 255, 255, 255);
     geode.draw(0, 0, ofGetWidth(), ofGetHeight());
+    //ofSetColor(255, 255, 255, 255 );
+
+
     
-    
-    //-----drag and drop----------
-	
-	float dx = dragPt.x;
-	float dy = dragPt.y;
-	for(unsigned int k = 0; k < draggedImages.size(); k++){
-		draggedImages[k].draw(dx, dy);
-		dy += draggedImages[k].getHeight() + 10;
-	}
+    ofSetColor(255);
+
     
     //____initial attractor valuers/setup
-    int n = 100000;
-    
     
     float a = 1.4;
     float b = 1.56;
@@ -70,10 +52,7 @@ void testApp::draw(){
     float x0, y0, x1, y1 = 0;
     x0 = y0 = x1 = y1 = 0;
     
-    //ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
-    //ofScale(150, 150, 200);
-    
-    
+
     ///___options for key interaction with attractors-------
     
     
@@ -112,37 +91,27 @@ void testApp::draw(){
     if (balloonValue < 20){
         ofSetColor(255);
     }
-
-
     
     
 	//----drawing the attractor------
     
-    ofVec2f middle(ofGetWidth()/2, ofGetHeight()/2);
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
+    ofScale(150, 150, 200);
     
     for (int i=0; i<numPoints; i++) {
         x1 = sin(a * y0) - cos(b * x0);
         y1 = sin(c * x0) - cos(d * y0);
         
-        //ofSetColor(170, 0, 0);
-        //ofFill();
-        //ofEllipse(x1, y1, .01, .01);//, x1+0.01, y1);
-        
-        mesh.setVertex(i, middle + ofVec2f(x1 * 150,y1 * 150));
-        
-        //power of 2 issue
-        mesh.setTexCoord(i, middle + ofVec2f(x1 * 150,y1 * 150));
+        ofFill(); 
+        ofLine(x1, y1, x1+0.01, y1);
+
         
         x0 = x1;
         y0 = y1;
+        
+        
     }
-    
-    glPointSize(2.0);
-    
-    ofSetColor(255);
-    geode.getTextureReference().bind();
-    mesh.draw();
-    geode.getTextureReference().unbind();
+
 }
 
 //--------------------------------------------------------------
@@ -235,15 +204,7 @@ void testApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void testApp::dragEvent(ofDragInfo info){
-	
-	if( info.files.size() > 0 ){
-		dragPt = info.position;
-		
-		draggedImages.assign( info.files.size(), ofImage() );
-		for(unsigned int k = 0; k < info.files.size(); k++){
-			draggedImages[k].loadImage(info.files[k]);
-		}
-	}
-    
+ 
 }
+
 

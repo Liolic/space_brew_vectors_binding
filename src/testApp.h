@@ -21,10 +21,6 @@ public:
     void gotMessage(ofMessage msg);
     void dragEvent(ofDragInfo dragInfo);
     
-    //____drag&drop________
-    vector <ofImage> draggedImages;
-    ofPoint dragPt;
-    
     
     float a;
     float b;
@@ -48,6 +44,7 @@ public:
     int A2Value;
     int balloonValue;
     
-
-	
+    int numPoints = 100000;    
+    
+    
 };
